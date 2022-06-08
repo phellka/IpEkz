@@ -1,7 +1,6 @@
 package com.example.demo.Workers.controller;
 
-import com.example.demo.Workers.model.Collector;
-import com.example.demo.WebConfiguration;
+import com.example.demo.Configuration.WebConfiguration;
 import com.example.demo.Workers.service.CollectorService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

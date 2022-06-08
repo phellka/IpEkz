@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -11,5 +11,11 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");
+    }
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        WebMvcConfigurer.super.addViewControllers(registry);
+        registry.addViewController("rest-test");
+        registry.addViewController("login");
     }
 }
