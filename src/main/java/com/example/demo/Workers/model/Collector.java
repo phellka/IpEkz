@@ -1,5 +1,7 @@
 package com.example.demo.Workers.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -26,6 +28,7 @@ public class Collector {
         this.qualification = qualification;
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Long getId() {
         return id;
     }

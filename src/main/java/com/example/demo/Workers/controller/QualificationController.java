@@ -1,6 +1,7 @@
 package com.example.demo.Workers.controller;
 
 import com.example.demo.Workers.model.Qualification;
+import com.example.demo.WebConfiguration;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,7 +15,7 @@ import com.example.demo.Workers.service.QualificationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/qualification")
+@RequestMapping(WebConfiguration.REST_API + "/qualification")
 public class QualificationController {
     private final QualificationService qualificationService;
 
@@ -27,14 +28,14 @@ public class QualificationController {
         return new QualificationDto(qualificationService.findQualification(id));
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<QualificationDto> getQualifications() {
         return qualificationService.findAllQualifications().stream()
                 .map(QualificationDto::new)
                 .toList();
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public QualificationDto createQualification(@RequestParam("category") int category,
                                  @RequestParam("name") String name) {
         return new QualificationDto(qualificationService.addQualification(category, name));

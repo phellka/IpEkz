@@ -1,6 +1,7 @@
 package com.example.demo.Workers.controller;
 
 import com.example.demo.Workers.model.Collector;
+import com.example.demo.WebConfiguration;
 import com.example.demo.Workers.service.CollectorService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/collector")
+@RequestMapping(WebConfiguration.REST_API + "/collector")
 public class CollectorController {
     private final CollectorService collectorService;
 
@@ -27,13 +28,13 @@ public class CollectorController {
         return new CollectorDto(collectorService.findCollector(id));
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<CollectorDto> getCollectors() {
         return collectorService.findAllCollectors().stream()
                 .map(CollectorDto::new)
                 .toList();
     }
-    @PostMapping("/")
+    @PostMapping()
     public CollectorDto createCollector(@RequestParam("experience") int experience,
                                      @RequestParam("name") String name,
                                      @RequestParam("qualificationId") long qualificationId) {
