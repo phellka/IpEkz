@@ -3,37 +3,39 @@ package com.example.demo.Workers.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.Workers.model.Qualification;
+import com.example.demo.Workers.repository.QualificationRepository;
+import com.example.demo.util.validation.ValidatorUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QualificationService {
-    @PersistenceContext
-    private EntityManager em;
+    private final QualificationRepository qualificationRepository;
+    private final ValidatorUtil validatorUtil;
+
+    public QualificationService(QualificationRepository qualificationRepository,
+                                ValidatorUtil validatorUtil){
+        this.qualificationRepository = qualificationRepository;
+        this.validatorUtil = validatorUtil;
+    }
 
     @Transactional
     public Qualification addQualification(int category, String name) {
         final Qualification qualification = new Qualification(category, name);
-        em.persist(qualification);
-        return qualification;
+        validatorUtil.validate(qualification);
+        return qualificationRepository.save(qualification);
     }
 
     @Transactional(readOnly = true)
     public Qualification findQualification(Long id) {
-        final Qualification qualification = em.find(Qualification.class, id);
-        if (qualification == null) {
-            throw new EntityNotFoundException(String.format("Qualification with id [%s] is not found", id));
-        }
-        return qualification;
+        final Optional<Qualification> qualification = qualificationRepository.findById(id);
+        return qualification.orElseThrow(() -> new QualificationNotFoundException(id));
     }
 
     @Transactional(readOnly = true)
     public List<Qualification> findAllQualifications() {
-        return em.createQuery("select s from Qualification s", Qualification.class)
-                .getResultList();
+        return qualificationRepository.findAll();
     }
 
     @Transactional
@@ -41,18 +43,18 @@ public class QualificationService {
         final Qualification currentQualification = findQualification(id);
         currentQualification.setCategory(category);
         currentQualification.setName(name);
-        return em.merge(currentQualification);
+        return qualificationRepository.save(currentQualification);
     }
 
     @Transactional
     public Qualification deleteQualification(Long id) {
         final Qualification currentQualification = findQualification(id);
-        em.remove(currentQualification);
+        qualificationRepository.delete(currentQualification);
         return currentQualification;
     }
 
     @Transactional
     public void deleteAllQualifications() {
-        em.createQuery("delete from Qualification").executeUpdate();
+        qualificationRepository.deleteAll();
     }
 }

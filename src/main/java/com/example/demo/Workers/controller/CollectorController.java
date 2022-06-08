@@ -23,29 +23,31 @@ public class CollectorController {
     }
 
     @GetMapping("/{id}")
-    public Collector getCollector(@PathVariable Long id) {
-        return collectorService.findCollector(id);
+    public CollectorDto getCollector(@PathVariable Long id) {
+        return new CollectorDto(collectorService.findCollector(id));
     }
 
     @GetMapping("/")
-    public List<Collector> getCollectors() {
-        return collectorService.findAllCollectors();
+    public List<CollectorDto> getCollectors() {
+        return collectorService.findAllCollectors().stream()
+                .map(CollectorDto::new)
+                .toList();
     }
     @PostMapping("/")
-    public Collector createCollector(@RequestParam("experience") int experience,
+    public CollectorDto createCollector(@RequestParam("experience") int experience,
                                      @RequestParam("name") String name,
                                      @RequestParam("qualificationId") long qualificationId) {
-        return collectorService.addCollector(experience, name, qualificationId);
+        return new CollectorDto(collectorService.addCollector(experience, name, qualificationId));
     }
     @PatchMapping("/{id}")
-    public Collector updateCollector(@PathVariable Long id,
+    public CollectorDto updateCollector(@PathVariable Long id,
                                      @RequestParam("experience") int experience,
                                      @RequestParam("name") String name,
                                      @RequestParam("qualificationId") long qualificationId) {
-        return collectorService.updateCollector(id, experience, name, qualificationId);
+        return new CollectorDto(collectorService.updateCollector(id, experience, name, qualificationId));
     }
     @DeleteMapping("/{id}")
-    public Collector deleteCollector(@PathVariable Long id) {
-        return collectorService.deleteCollector(id);
+    public CollectorDto deleteCollector(@PathVariable Long id) {
+        return new CollectorDto(collectorService.deleteCollector(id));
     }
 }
