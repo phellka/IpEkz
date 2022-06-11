@@ -1,5 +1,7 @@
 package com.example.demo.Workers.service;
 
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.Workers.model.Qualification;
@@ -35,6 +37,7 @@ public class QualificationService {
 
     @Transactional(readOnly = true)
     public List<Qualification> findAllQualifications() {
+        var user = SecurityContextHolder.getContext().getAuthentication().getName();
         return qualificationRepository.findAll();
     }
 
